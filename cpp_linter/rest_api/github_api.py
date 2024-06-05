@@ -227,6 +227,7 @@ class GithubApiClient(RestApiClient):
             with 'custom style'.
         """
         style_guide = formalize_style_name(style)
+        log_commander.info(f"Clang warnings present in files: {files}")
         for file_obj in files:
             if not file_obj.format_advice:
                 continue
