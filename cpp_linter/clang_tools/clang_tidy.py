@@ -121,7 +121,7 @@ def tally_tidy_advice(files: List[FileObj]) -> int:
         for note in file_obj.tidy_advice.notes:
             tidy_checks_failed += 1
             if file_obj.name != note.filename:
-                logger.debug("%s != %s", file_obj.name, note.filename)
+                logger.debug("%s != %s (parsing anyways...)", file_obj.name, note.filename)
     return tidy_checks_failed
 
 
