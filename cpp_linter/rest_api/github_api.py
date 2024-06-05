@@ -242,6 +242,7 @@ class GithubApiClient(RestApiClient):
                 log_commander.info(output)
         for file_obj in files:
             if not file_obj.tidy_advice:
+                log_commander.info(f"No advice for file {file_obj}")
                 continue
             for note in file_obj.tidy_advice.notes:
                 if note.filename == file_obj.name:
