@@ -227,7 +227,6 @@ class GithubApiClient(RestApiClient):
             with 'custom style'.
         """
         style_guide = formalize_style_name(style)
-        log_commander.info(f"Clang warnings present in files: {files}")
         for file_obj in files:
             if not file_obj.format_advice:
                 continue
@@ -246,19 +245,20 @@ class GithubApiClient(RestApiClient):
                 log_commander.info(f"No advice for file {file_obj}")
                 continue
             for note in file_obj.tidy_advice.notes:
-                if note.filename == file_obj.name:
-                    output = "::{} ".format(
-                        "notice" if note.severity.startswith("note") else note.severity
-                    )
-                    output += "file={file},line={line},title={file}:{line}:".format(
-                        file=file_obj.name, line=note.line
-                    )
-                    output += "{cols} [{diag}]::{info}".format(
-                        cols=note.cols,
-                        diag=note.diagnostic,
-                        info=note.rationale,
-                    )
-                    log_commander.info(output)
+                if note.filename != file_obj.name:
+                    log_commander.debug("Filenames unequal, sending to gh api anyways...")
+                output = "::{} ".format(
+                    "notice" if note.severity.startswith("note") else note.severity
+                )
+                output += "file={file},line={line},title={file}:{line}:".format(
+                    file=file_obj.name, line=note.line
+                )
+                output += "{cols} [{diag}]::{info}".format(
+                    cols=note.cols,
+                    diag=note.diagnostic,
+                    info=note.rationale,
+                )
+                log_commander.info(output)
 
     def update_comment(
         self,
